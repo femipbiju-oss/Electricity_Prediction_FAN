@@ -1,8 +1,8 @@
 import streamlit as st
 import joblib
 import pandas as pd
-model = joblib.load("polynomial_regression(1).pkl")
-poly = joblib.load("polynomial_features(1).pkl")
+model = joblib.load("polynomial_regression (1).pkl")
+poly = joblib.load("polynomial_features (1).pkl")
 st.title("Electricity Bill Prediction")
 ac_unit = st.number_input(
     "Enter AC Units",
