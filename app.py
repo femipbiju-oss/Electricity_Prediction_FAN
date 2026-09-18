@@ -1,32 +1,30 @@
 import gradio as gr
 import joblib
 import pandas as pd
+import os
 
-# Load model and polynomial features
+# Load model
 model = joblib.load("polynomial_regression (1).pkl")
 poly = joblib.load("polynomial_features (1).pkl")
 
 
-# Prediction function
 def predict_bill(ac_unit, fan_unit):
 
-    new_data = pd.DataFrame({
+    input_data = pd.DataFrame({
         "AC_Units": [ac_unit],
         "Fan_Units": [fan_unit]
     })
 
-    # Apply polynomial transformation
-    new_data_poly = poly.transform(new_data)
+    input_data_poly = poly.transform(input_data)
 
-    # Predict electricity bill
-    prediction = model.predict(new_data_poly)
+    prediction = model.predict(input_data_poly)[0]
 
-    return f"Predicted Electricity Bill: {prediction[0]:.2f}"
+    return f"Predicted Electricity Bill: {prediction:.2f}"
 
 
-# Gradio interface
 demo = gr.Interface(
     fn=predict_bill,
+
     inputs=[
         gr.Number(
             label="Enter AC Units",
@@ -34,6 +32,7 @@ demo = gr.Interface(
             maximum=150,
             value=30
         ),
+
         gr.Number(
             label="Enter Fan Units",
             minimum=1,
@@ -41,10 +40,17 @@ demo = gr.Interface(
             value=30
         )
     ],
-    outputs=gr.Textbox(label="Electricity Bill"),
+
+    outputs=gr.Textbox(label="Prediction"),
+
     title="Electricity Bill Prediction",
-    description="Enter AC and Fan units to predict the electricity bill."
+
+    description="Predict Electricity Bill based on AC Units and Fan Units."
 )
 
-# Run the application
-demo.launch()
+
+if __name__ == "__main__":
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=int(os.environ.get("PORT", 7860))
+    )
