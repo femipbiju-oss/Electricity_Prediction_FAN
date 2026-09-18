@@ -19,7 +19,7 @@ fan_unit = st.number_input(
 if st.button("Predict"):
 
     new_data = pd.DataFrame({
-        "AC_Units": [ac_unit]
+        "AC_Units": [ac_unit],
         "Fan_Units":[fan_unit]
 
     })
